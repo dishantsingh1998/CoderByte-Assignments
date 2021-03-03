@@ -1,0 +1,148 @@
+import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
+
+const style = {
+  table: {
+    borderCollapse: 'collapse'
+  },
+  tableCell: {
+    border: '1px solid gray',
+    margin: 0,
+    padding: '5px 10px',
+    width: 'max-content',
+    minWidth: '150px'
+  },
+  form: {
+    container: {
+      padding: '20px',
+      border: '1px solid #F0F8FF',
+      borderRadius: '15px',
+      width: 'max-content',
+      marginBottom: '40px'
+    },
+    inputs: {
+      marginBottom: '5px'
+    },
+    submitBtn: {
+      marginTop: '10px',
+      padding: '10px 15px',
+      border:'none',
+      backgroundColor: 'lightseagreen',
+      fontSize: '14px',
+      borderRadius: '5px'
+    }
+  }
+}
+ function PhoneList({ phoneNumbers }) {
+  const sortedNumbers = phoneNumbers.sort((a, b) => {
+      const nameA = a.lastName.toUpperCase();
+      const nameB = b.lastName.toUpperCase();
+      if (nameA < nameB) {
+          return -1;
+      }
+      if(nameA > nameB) {
+          return 1;
+      }
+
+      return 0;
+  })
+
+  return (
+      <table className="phone-list">
+          <thead>
+              <tr>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Phone Number</th>
+              </tr>
+          </thead>
+          <tbody>      
+              {sortedNumbers.map((number) => (
+                  <tr key={number.phone}>
+                      <td>{number.firstName}</td>
+                      <td>{number.lastName}</td>
+                      <td>{number.phone}</td>
+                  </tr>
+              ))}
+          </tbody>
+      </table>
+  )
+}
+
+ function PhoneForm({ onSubmit }) {
+  const [newNumber, setNewNumber] = useState({
+      firstName: "",
+      lastName: "",
+      phone: ""
+  })
+
+  const handleChange = (e) => {
+      e.preventDefault();
+      const { name, value } = e.target;
+      setNewNumber({
+          ...newNumber,
+          [name]: value
+      })
+  }
+
+  const handleSubmit = (e) => {
+      e.preventDefault()
+      onSubmit(newNumber)
+      setNewNumber({
+          firstName: "",
+          lastName: "",
+          phone: ""
+      })
+  }
+
+  return (
+      <form 
+          className="phone-form flex column"
+          onSubmit={(e) => handleSubmit(e)}>
+          <label>First Name</label>
+          <input 
+              type="text" 
+              name="firstName"
+              onChange={(e) => handleChange(e)}
+              value={newNumber.firstName}>
+          </input>
+          <label>Last Name</label>
+          <input 
+              type="text" 
+              name="lastName"
+              onChange={(e) => handleChange(e)}
+              value={newNumber.lastName}>
+          </input>
+          <label>Phone</label>
+          <input 
+              type="text" 
+              name="phone"
+              onChange={(e) => handleChange(e)}
+              value={newNumber.phone}>
+          </input>
+          <button className="self-end">Submit</button>
+      </form>
+  );
+}
+
+function App() {
+  const [phoneNumbers, setPhoneNumbers] = useState([{
+    firstName: "Jane",
+    lastName: "Doe",
+    phone: "123-456-7891"
+  }])
+
+  const handleSubmit = (newNumber) => {
+    setPhoneNumbers([...phoneNumbers, newNumber])
+  }
+  
+  return (
+    <div>
+      <h2>Phone Book</h2>
+      <PhoneForm onSubmit={handleSubmit}/>
+      <PhoneList phoneNumbers={phoneNumbers} />
+    </div>
+  );
+}
+
+export default App;

@@ -1,0 +1,13 @@
+SELECT
+
+maintable_XT6AY.GroupID,CompanyName,count(*) AS Count
+
+FROM maintable_XT6AY
+
+ JOIN cb_vendorinformation 
+
+ON maintable_XT6AY.GroupID=cb_vendorinformation.GroupID
+
+GROUP BY GroupID
+
+ORDER BY Count ASC;

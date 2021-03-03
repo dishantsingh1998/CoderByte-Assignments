@@ -1,0 +1,3 @@
+SELECT LastName, SUM(age) as SumAge
+FROM maintable_HG628
+WHERE LastName LIKE 'Smith'
